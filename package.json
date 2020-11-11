@@ -1,0 +1,18 @@
+{
+  "name": "object-deserializator",
+  "version": "1.0.0",
+  "description": "Typesafe deserialization, validation and transformation of POJO to data objects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "deserialize",
+    "json",
+    "pojo",
+    "validation",
+    "transform"
+  ],
+  "author": "Vladislav Navrocky",
+  "license": "ISC"
+}
