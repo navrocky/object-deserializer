@@ -1,12 +1,13 @@
 {
   "name": "object-deserializator",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Typesafe deserialization, validation and transformation of POJO to data objects",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest --config jest.json"
+    "test": "jest --config jest.json",
+    "test-watch": "jest --config jest.json --watch"
   },
   "keywords": [
     "deserialize",

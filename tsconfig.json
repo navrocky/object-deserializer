@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2019",
     "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
     "outDir": "./lib",
     "strict": true,
     "lib": ["es2015", "ES2016"]
