@@ -1,8 +1,8 @@
 # Typesafe Object Deserializer
 
-This is a simple and lightweight library for typesafe deserialize, convert and validate **POJO** (Plain Old Javascript Object) which is usually came from the server as a JSON response.
+This is a simple and lightweight library for typesafe deserialization, convertion and validation of a **POJO** (Plain Old Javascript Object) which you usually receive from the server as a JSON response.
 
-If any error occured object deserializer throws the `DeserializationError` with an additional information about path to the invalid value in a POJO.
+If any error occures object deserializer throws a `DeserializationError` with an additional information about a path to the invalid value in a POJO.
 
 This is a simple usage example:
 ```typescript
@@ -30,6 +30,7 @@ const person = deserialize<Person>(JSON.parse(response), d =>
 ```
 
 You can create your own value mappers like this:
+
 ```typescript
 function personMapper(d: ObjectDeserializer): Person {
   return {
@@ -43,4 +44,4 @@ And use it later:
 const person = d.required('person').asObject(personMapper);
 ```
 
-The more advanced examples you can find in a unit tests [here](src/__tests__/objectDeserializer.test.ts).
+You can find more advanced examples in the unit tests [file](src/__tests__/objectDeserializer.test.ts).
