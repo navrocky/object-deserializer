@@ -2,6 +2,10 @@
   "name": "object-deserializator",
   "version": "0.1.0",
   "description": "Typesafe deserialization, validation and transformation of POJO to data objects",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/navrocky/object-deserializer.git"
+  },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
