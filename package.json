@@ -1,6 +1,6 @@
 {
-  "name": "object-deserializator",
-  "version": "0.1.0",
+  "name": "object-deserializer",
+  "version": "0.2.0",
   "description": "Typesafe deserialization, validation and transformation of POJO to data objects",
   "repository": {
     "type": "git",
