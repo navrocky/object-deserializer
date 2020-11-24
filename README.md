@@ -1,5 +1,7 @@
 # Typesafe Object Deserializer
 
+![Node.js Package](https://github.com/navrocky/object-deserializer/workflows/Publish%20Node.js%20Package/badge.svg)
+
 This is a simple and lightweight library for typesafe deserialization, convertion and validation of a **POJO** (Plain Old Javascript Object) which you usually receive from the server as a JSON response.
 
 If any error occures object deserializer throws a `DeserializationError` with an additional information about a path to the invalid value in a POJO.
