@@ -1,6 +1,6 @@
 {
   "name": "object-deserializer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Typesafe deserialization, validation and transformation of POJO to data objects",
   "repository": {
     "type": "git",
@@ -20,7 +20,11 @@
     "validation",
     "transform"
   ],
-  "author": "Vladislav Navrocky (navrocky.vlad@gmail.com)",
+  "author": {
+    "name": "Vladislav Navrocky",
+    "email": "navrocky.vlad@gmail.com",
+    "url": "https://github.com/navrocky"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^26.0.15",
