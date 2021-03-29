@@ -1,6 +1,6 @@
 # Typesafe Object Deserializer
 
-![Publish to npmjs.com](https://github.com/navrocky/object-deserializer/workflows/Publish%20to%20npmjs.com/badge.svg)
+![Publish to npmjs.com](https://github.com/Sebbia/object-deserializer/workflows/Publish%20to%20npmjs.com/badge.svg)
 
 This is a simple and lightweight library for typesafe deserialization, convertion and validation of a **POJO** (Plain Old Javascript Object) which you usually receive from the server as a JSON response.
 
