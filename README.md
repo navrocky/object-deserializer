@@ -1,6 +1,6 @@
 # Typesafe Object Deserializer
 
-<a href="https://www.npmjs.com/package/@sebbia/object-deserializer">
+<a href="https://www.npmjs.com/package/@sebbia/object-deserializer" target="_blank">
   <img src="https://github.com/Sebbia/object-deserializer/workflows/Publish%20to%20npmjs.com/badge.svg" alt="badge" /img>
 </a>
 
