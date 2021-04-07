@@ -1,5 +1,6 @@
 name: Publish to npmjs.com
 on:
+  workflow_dispatch:
   release:
     types: [created]
 jobs:
@@ -15,6 +16,6 @@ jobs:
     - run: npm install
     - run: npm test
     - run: npm run build
-    - run: npm publish
+    - run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
