@@ -14,7 +14,7 @@ export class ValueWrapper {
 
   /**
    * Checks and returns value as boolean.
-   * 
+   *
    * @throws DeserializationError
    */
   get asBool(): boolean {
@@ -24,7 +24,7 @@ export class ValueWrapper {
 
   /**
    * Checks and returns value as string.
-   * 
+   *
    * @throws DeserializationError
    */
   get asString(): string {
@@ -34,7 +34,7 @@ export class ValueWrapper {
 
   /**
    * Checks and returns value as number.
-   * 
+   *
    * @throws DeserializationError
    */
   get asNumber(): number {
@@ -44,7 +44,7 @@ export class ValueWrapper {
 
   /**
    * Checks and returns value as date.
-   * 
+   *
    * @throws DeserializationError
    */
   get asDate(): Date {
@@ -56,7 +56,7 @@ export class ValueWrapper {
 
   /**
    * Convert raw value to target type with provided mapper function.
-   * 
+   *
    * @throws DeserializationError
    */
   as<T>(mapper: (value: any, path: DeserializationPath) => T): T {
@@ -65,29 +65,28 @@ export class ValueWrapper {
 
   /**
    * Converts raw value to array of target type with provided mapper function.
-   * 
+   *
    * @throws DeserializationError
    */
   asArray<T>(mapper: (value: any, path: DeserializationPath) => T): T[] {
     if (!Array.isArray(this.value)) throw new DeserializationError(this.path, 'Not an array');
-    return this.value.map(v => mapper(v, this.path));
+    return this.value.map((v) => mapper(v, this.path));
   }
 
   /**
    * Deserialize value to the target type with a provided object mapper.
-   * 
-   * @param mapper 
+   *
+   * @param mapper
    */
   asObject<T>(mapper: (d: ObjectDeserializer) => T): T {
     const obj = new ObjectDeserializer(this.value, this.path);
     return mapper(obj);
   }
 
-
   /**
    * Deserialize value to the array of target objects with a provided object mapper.
-   * 
-   * @param mapper 
+   *
+   * @param mapper
    */
   asArrayOfObjects<T>(mapper: (d: ObjectDeserializer) => T): T[] {
     return this.asArray((v, p) => mapper(new ObjectDeserializer(v, p)));
@@ -95,10 +94,24 @@ export class ValueWrapper {
 
   /**
    * Deserialize value to the array of optional target objects with a provided object mapper.
-   * 
-   * @param mapper 
+   *
+   * @param mapper
    */
   asArrayOfOptionalObjects<T>(mapper: (d: ObjectDeserializer) => T | undefined): (T | undefined)[] {
     return this.asArray<T | undefined>((v, p) => (v ? mapper(new ObjectDeserializer(v, p)) : undefined));
+  }
+
+  /**
+   * Deserialize value to the enum value
+   *
+   * @param enumType
+   */
+  asEnum<T>(enumType: T): T[keyof T] {
+    const key = this.value as keyof T;
+    const result = enumType[key];
+    if (result === undefined) {
+      throw new DeserializationError(this.path, `Unregistered enum value: ${this.value}`);
+    }
+    return result;
   }
 }
