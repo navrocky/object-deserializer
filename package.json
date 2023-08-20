@@ -1,10 +1,10 @@
 {
-  "name": "@sebbia/object-deserializer",
+  "name": "object-deserializer",
   "version": "0.5.0",
   "description": "Typesafe deserialization, validation and transformation of POJO to data objects",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Sebbia/object-deserializer.git"
+    "url": "https://github.com/navrocky/object-deserializer"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -22,8 +22,8 @@
   ],
   "author": {
     "name": "Vladislav Navrocky",
-    "email": "navrocky@sebbia.com",
-    "url": "https://github.com/Sebbia"
+    "email": "navrocky.vlad@gmail.com",
+    "url": "https://github.com/navrocky"
   },
   "license": "ISC",
   "devDependencies": {
