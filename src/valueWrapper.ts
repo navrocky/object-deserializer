@@ -3,7 +3,7 @@ import { DeserializationPath } from './deserializationPath';
 import { ObjectDeserializer } from './objectDeserializer';
 
 export class ValueWrapper {
-  constructor(private path: DeserializationPath, private value: any) {}
+  constructor(private path: DeserializationPath, private value: unknown) {}
 
   /**
    * Returns value as is.
@@ -102,7 +102,7 @@ export class ValueWrapper {
   }
 
   /**
-   * Deserialize value to the enum value
+   * Deserialize value to the enum key value. This method supports number enums.
    *
    * @param enumType
    */
@@ -113,5 +113,19 @@ export class ValueWrapper {
       throw new DeserializationError(this.path, `Unregistered enum value: ${this.value}`);
     }
     return result;
+  }
+
+  /**
+   * Deserialize value to the string enum value.
+   *
+   * @param enumType
+   */
+  asEnumValue<T extends { [key: string]: string }>(enumType: T): T[keyof T] {
+    const value = this.value;
+    if (typeof value !== 'string') throw new DeserializationError(this.path, `String value required`);
+    const acceptedValues = Object.values(enumType);
+    if (!acceptedValues.includes(value))
+      throw new DeserializationError(this.path, `Unregistered enum value: ${this.value}`);
+    return value as T[keyof T];
   }
 }

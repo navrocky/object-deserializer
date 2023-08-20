@@ -5,10 +5,16 @@ enum Role {
   ADMIN,
 }
 
+enum Status {
+  ACTIVE = 'active',
+  BLOCKED = 'blocked',
+}
+
 type User = {
   login: string;
   birthday?: Date;
   role: Role;
+  status: Status;
 };
 
 function roleMapper(v: any, path: DeserializationPath): Role {
@@ -28,6 +34,7 @@ function userMapper(d: ObjectDeserializer): User {
     login: d.required('login').asString,
     role: d.required('role').as(roleMapper),
     birthday: d.optional('birthday')?.asDate,
+    status: d.required('status').asEnumValue(Status),
   };
 }
 
@@ -52,8 +59,8 @@ test('Simple usage', () => {
     }
   }`;
 
-  const person = deserialize<Person>(JSON.parse(response), d =>
-    d.required('person').asObject(d => ({
+  const person = deserialize<Person>(JSON.parse(response), (d) =>
+    d.required('person').asObject((d) => ({
       name: d.required('name').asString,
       birthday: d.optional('birthday')?.asDate,
     }))
@@ -72,12 +79,14 @@ test('Advanced user deserialization', () => {
       "users": [
         {
           "login": "admin",
-          "role": "ADMIN"
+          "role": "ADMIN",
+          "status": "active"
         },
         {
           "login": "user",
           "birthday": "1990-01-01",
-          "role": "USER"
+          "role": "USER",
+          "status": "blocked"
         }
       ]
     }
@@ -85,17 +94,20 @@ test('Advanced user deserialization', () => {
 
   const dto = JSON.parse(response);
 
-  const users = deserialize(dto, d => d.required('result.users').asArrayOfObjects(userMapper));
+  const users = deserialize(dto, (d) => d.required('result.users').asArrayOfObjects(userMapper));
 
   expect(users).toEqual([
     {
+      birthday: undefined,
       login: 'admin',
       role: Role.ADMIN,
+      status: Status.ACTIVE,
     },
     {
       login: 'user',
       role: Role.USER,
       birthday: new Date('1990-01-01'),
+      status: Status.BLOCKED,
     },
   ]);
 });
