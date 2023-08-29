@@ -28,7 +28,8 @@ export class ValueWrapper {
    * @throws DeserializationError
    */
   get asString(): string {
-    if (typeof this.value !== 'string') throw new DeserializationError(this.path, 'Not a string');
+    if (typeof this.value !== 'string')
+      throw new DeserializationError(this.path, `Not a string. Type: ${typeof this.value}`);
     return this.value;
   }
 
@@ -70,7 +71,7 @@ export class ValueWrapper {
    */
   asArray<T>(mapper: (value: any, path: DeserializationPath) => T): T[] {
     if (!Array.isArray(this.value)) throw new DeserializationError(this.path, 'Not an array');
-    return this.value.map((v) => mapper(v, this.path));
+    return this.value.map((v, i) => mapper(v, this.path.append([i.toString()])));
   }
 
   /**
@@ -99,6 +100,23 @@ export class ValueWrapper {
    */
   asArrayOfOptionalObjects<T>(mapper: (d: ObjectDeserializer) => T | undefined): (T | undefined)[] {
     return this.asArray<T | undefined>((v, p) => (v ? mapper(new ObjectDeserializer(v, p)) : undefined));
+  }
+
+  /**
+   * Deserialize source value to the array of values with a provided value wrapper mapper.
+   */
+  asArrayOfVals<T>(mapper: (v: ValueWrapper) => T): T[] {
+    return this.asArray((v, p) => {
+      if (v === undefined || v === null) throw new DeserializationError(p, 'Value required');
+      return mapper(new ValueWrapper(p, v));
+    });
+  }
+
+  /**
+   * Deserialize source value to the array of optional values with a provided value wrapper mapper.
+   */
+  asArrayOfOptionalVals<T>(mapper: (v: ValueWrapper) => T): (T | undefined)[] {
+    return this.asArray<T | undefined>((v, p) => (v ? mapper(new ValueWrapper(p, v)) : undefined));
   }
 
   /**

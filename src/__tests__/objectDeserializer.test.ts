@@ -38,76 +38,90 @@ function userMapper(d: ObjectDeserializer): User {
   };
 }
 
-test('Simple usage', () => {
-  type Person = {
-    name: string;
-    birthday?: Date;
-  };
-
-  function personMapper(d: ObjectDeserializer): Person {
-    return {
-      name: d.required('name').asString,
-      birthday: d.optional('birthday')?.asDate,
+describe('Deserialize objects', () => {
+  it('Object with user', () => {
+    const response = {
+      user: {
+        login: 'admin',
+        role: 'ADMIN',
+        status: 'active',
+      },
     };
-  }
+    const user = deserialize<User>(response, (d) => d.required('user').asObject(userMapper));
+    expect(user).toEqual({
+      login: 'admin',
+      role: Role.ADMIN,
+      status: 'active',
+    });
+  });
 
-  const response = `
-  {
-    "person": {
-      "name": "John",
-      "birthday": "1990-01-01"
-    }
-  }`;
+  it('Array of users', () => {
+    const response = {
+      result: {
+        users: [
+          {
+            login: 'admin',
+            role: 'ADMIN',
+            status: 'active',
+          },
+          {
+            login: 'user',
+            birthday: '1990-01-01',
+            role: 'USER',
+            status: 'blocked',
+          },
+        ],
+      },
+    };
 
-  const person = deserialize<Person>(JSON.parse(response), (d) =>
-    d.required('person').asObject((d) => ({
-      name: d.required('name').asString,
-      birthday: d.optional('birthday')?.asDate,
-    }))
-  );
+    const users = deserialize(response, (d) => d.required('result.users').asArrayOfObjects(userMapper));
 
-  expect(person).toEqual({
-    name: 'John',
-    birthday: new Date('1990-01-01'),
+    expect(users).toEqual([
+      {
+        birthday: undefined,
+        login: 'admin',
+        role: Role.ADMIN,
+        status: Status.ACTIVE,
+      },
+      {
+        login: 'user',
+        role: Role.USER,
+        birthday: new Date('1990-01-01'),
+        status: Status.BLOCKED,
+      },
+    ]);
   });
 });
 
-test('Advanced user deserialization', () => {
-  const response = `
-  {
-    "result": {
-      "users": [
-        {
-          "login": "admin",
-          "role": "ADMIN",
-          "status": "active"
-        },
-        {
-          "login": "user",
-          "birthday": "1990-01-01",
-          "role": "USER",
-          "status": "blocked"
-        }
-      ]
-    }
-  }`;
+describe('Deserialize array', () => {
+  it('All items required', () => {
+    const response = {
+      items: ['a', 'b', 'c'],
+    };
+    const obj = deserialize(response, (d) => ({
+      items: d.required('items').asArrayOfVals((v) => v.asString),
+    }));
+    expect(obj).toEqual(response);
+  });
 
-  const dto = JSON.parse(response);
+  it('Throws if required value is undefined', () => {
+    const response = {
+      items: ['a', undefined, 'c'],
+    };
+    expect(() =>
+      deserialize(response, (d) => ({
+        items: d.required('items').asArrayOfVals((v) => v.asString),
+      }))
+    ).toThrowError(/Value required/);
+  });
 
-  const users = deserialize(dto, (d) => d.required('result.users').asArrayOfObjects(userMapper));
-
-  expect(users).toEqual([
-    {
-      birthday: undefined,
-      login: 'admin',
-      role: Role.ADMIN,
-      status: Status.ACTIVE,
-    },
-    {
-      login: 'user',
-      role: Role.USER,
-      birthday: new Date('1990-01-01'),
-      status: Status.BLOCKED,
-    },
-  ]);
+  it('Items is optional', () => {
+    const response = {
+      items: ['a', undefined, 'c'],
+    };
+    const obj = deserialize(response, (d) => ({
+      items: d.required('items').asArrayOfOptionalVals((v) => v.asString),
+    }));
+    expect(obj).toEqual(response);
+  });
 });
